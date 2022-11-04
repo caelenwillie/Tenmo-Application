@@ -55,7 +55,7 @@ public class Transfer {
         return account_from;
     }
 
-    public void setAccount_from(Account account_from) {
+    public void setAccount_from(int account_from) {
         this.account_from = account_from;
     }
 
@@ -63,7 +63,7 @@ public class Transfer {
         return account_to;
     }
 
-    public void setAccount_to(Account account_to) {
+    public void setAccount_to(int account_to) {
         this.account_to = account_to;
     }
 
