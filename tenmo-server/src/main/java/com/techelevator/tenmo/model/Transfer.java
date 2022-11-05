@@ -7,24 +7,21 @@ public class Transfer {
     private int transfer_id;
     private int transfer_type_id;
     private int transfer_status_id;
-    private Account account_from;
-    private Account account_to;
+    private int account_from;
+    private int account_to;
     private BigDecimal amount;
-    private String transfer_description;
-
 
     public Transfer() {
     }
 
-    public Transfer(int transfer_id, int transfer_type_id, int transfer_status_id, Account account_from,
-                    Account account_to, BigDecimal amount, String transfer_description) {
+    public Transfer(int transfer_id, int transfer_type_id, int transfer_status_id, int account_from,
+                    int account_to, BigDecimal amount) {
         this.transfer_id = transfer_id;
         this.transfer_type_id = transfer_type_id;
         this.transfer_status_id = transfer_status_id;
         this.account_from = account_from;
         this.account_to = account_to;
         this.amount = amount;
-        this.transfer_description = transfer_description;
     }
 
     public int getTransfer_id() {
@@ -51,7 +48,7 @@ public class Transfer {
         this.transfer_status_id = transfer_status_id;
     }
 
-    public Account getAccount_from() {
+    public int getAccount_from() {
         return account_from;
     }
 
@@ -59,7 +56,7 @@ public class Transfer {
         this.account_from = account_from;
     }
 
-    public Account getAccount_to() {
+    public int getAccount_to() {
         return account_to;
     }
 
@@ -75,13 +72,6 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public String getTransfer_description() {
-        return transfer_description;
-    }
-
-    public void setTransfer_description(String transfer_description) {
-        this.transfer_description = transfer_description;
-    }
 
     @Override
     public String toString() {
@@ -92,7 +82,6 @@ public class Transfer {
                 ", account_from=" + account_from +
                 ", account_to=" + account_to +
                 ", amount=" + amount +
-                ", transfer_description='" + transfer_description + '\'' +
                 '}';
     }
 }

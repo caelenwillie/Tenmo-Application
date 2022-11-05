@@ -1,5 +1,6 @@
 package com.techelevator.tenmo.dao;
 
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -16,7 +17,7 @@ import java.util.List;
 @Component
 public class JdbcUserDao implements UserDao {
 
-    private static final BigDecimal STARTING_BALANCE = new BigDecimal("9999.99");
+    private static final BigDecimal STARTING_BALANCE = new BigDecimal("1000.00");
     private final JdbcTemplate jdbcTemplate;
 
     public JdbcUserDao(JdbcTemplate jdbcTemplate) {
@@ -96,6 +97,36 @@ public class JdbcUserDao implements UserDao {
         return true;
     }
 
+    /* Moved following 2 methods from JdbcTransferDao to JdbcUserDao */
+    public List<Transfer> getTransferForUserIdTransferId(int user_id, int transfer_id) {
+        String sql = "SELECT * FROM transfer " +
+                "JOIN account ON account.account_id = transfer.account_from OR account.account_id = transfer.account_to " +
+                "WHERE user_id = ? AND transfer_id = ? ";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, user_id, transfer_id);
+        List<Transfer> transfers = new ArrayList<>();
+        while(results.next()) {
+            transfers.add(mapRowToTransfer(results));
+        }
+        return transfers;
+    }
+
+    // Get Request
+    public List<Transfer> getTransferForUserId(int user_id) {
+        List<Transfer> transfers = new ArrayList<>();
+        String sql = "SELECT * FROM transfer " +
+                "JOIN account ON account.account_id = transfer.account_from OR account.account_id = transfer.account_to " +
+                "WHERE user_id = ?";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql,user_id);
+            while(results.next()){
+                transfers.add(mapRowToTransfer(results));
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return transfers;
+    }
+
     private User mapRowToUser(SqlRowSet rs) {
         User user = new User();
         user.setId(rs.getInt("user_id"));
@@ -104,5 +135,17 @@ public class JdbcUserDao implements UserDao {
         user.setActivated(true);
         user.setAuthorities("USER");
         return user;
+    }
+
+    /* Copied the following method from JdbcTransferDao */
+    private Transfer mapRowToTransfer(SqlRowSet rs){
+        Transfer transfer = new Transfer();
+        transfer.setTransfer_id(rs.getInt("transfer_id"));
+        transfer.setTransfer_type_id(rs.getInt("transfer_type_id"));
+        transfer.setTransfer_status_id(rs.getInt("transfer_status_id"));
+        transfer.setAccount_from(rs.getInt("account_from"));
+        transfer.setAccount_to(rs.getInt("account_to"));
+        transfer.setAmount(rs.getBigDecimal("amount"));
+        return transfer;
     }
 }

@@ -1,23 +1,42 @@
 package com.techelevator.tenmo.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.techelevator.tenmo.dao.AccountDao;
+import com.techelevator.tenmo.dao.TransferDao;
+import com.techelevator.tenmo.model.Account;
+import com.techelevator.tenmo.model.Transfer;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
-
+/* Changed from /transfer to /transfers */
+@RequestMapping("/transfers")
 @RestController
-@RequestMapping("/transfer")
 public class TransferController {
 
     // Step 2
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public BigDecimal getTransferForId(@PathVariable int id) {
-        return dao.getAccountBalance(id);
+    private TransferDao dao;
+    public TransferController(TransferDao dao) {
+        this.dao = dao;
     }
+
+    @RequestMapping(value = "/{transfer_id}", method = RequestMethod.GET)
+    public List<Transfer> getTransferByID(@PathVariable int transfer_id) {
+        return dao.getTransferByID(transfer_id);
+    }
+
+    /* Added new mapping */
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<Transfer> getAllTransfers() {
+        return dao.getAllTransfers();
+    }
+
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public Transfer createTransfer(@RequestBody Transfer transfer) {
+        return dao.createTransfer(transfer);
+    }
+
 
 
 

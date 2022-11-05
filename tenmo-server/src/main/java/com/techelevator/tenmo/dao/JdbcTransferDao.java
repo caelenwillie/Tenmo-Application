@@ -4,11 +4,13 @@ import com.techelevator.tenmo.model.Account;
 import com.techelevator.tenmo.model.Transfer;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class JdbcTransferDao implements TransferDao {
 
     // Step 1
@@ -19,39 +21,84 @@ public class JdbcTransferDao implements TransferDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Get Request
-    public Transfer getTransferByID(int id) {
-        return null;
+    /* Added the following method to retrieve all transfers */
+    public List<Transfer> getAllTransfers() {
+        String sql = "SELECT * FROM transfer";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql);
+        List<Transfer> transfers = new ArrayList<>();
+        while(results.next()) {
+            transfers.add(mapRowToTransfer(results));
+        }
+        return transfers;
     }
 
     // Get Request
-    public Transfer getAllTransfer(int user_id) {
-        return null;
+    public List<Transfer> getTransferByID(int transfer_id) {
+        String sql = "SELECT * FROM transfer WHERE transfer_id = ?";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transfer_id);
+        List<Transfer> transfers = new ArrayList<>();
+        while(results.next()) {
+            transfers.add(mapRowToTransfer(results));
+        }
+        return transfers;
     }
 
+
+
+    /* Moved the following methods to JdbcUserDao
+    public List<Transfer> getTransferForUserIdTransferId(int user_id, int transfer_id) {
+        String sql = "SELECT * FROM transfer " +
+                "JOIN accounts ON accounts.account_id = transfers.account_from OR accounts.account_id = transfers.account_to " +
+                "WHERE user_id = ? AND transfer_id = ? ";
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, user_id, transfer_id);
+        List<Transfer> transfers = new ArrayList<>();
+        while(results.next()) {
+            transfers.add(mapRowToTransfer(results));
+        }
+        return transfers;
+    }
+
+    // Get Request
+    public List<Transfer> getTransferForUserId(int user_id) {
+        List<Transfer> transfers = new ArrayList<>();
+        String sql = "SELECT * FROM transfer " +
+                    "JOIN account ON account.account_id = transfer.account_from OR account.account_id = transfer.account_to " +
+                    "WHERE user_id = ?";
+        try {
+            SqlRowSet results = jdbcTemplate.queryForRowSet(sql,user_id);
+            while(results.next()){
+                transfers.add(mapRowToTransfer(results));
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return transfers;
+    }
+    */
 
     // Step 1
     //Post Request
-    public boolean createTransfer(Account account_from, Account account_to, BigDecimal amount) {
-        Transfer transfer = new Transfer();
-        String sql = "INSERT INTO transfer (account_from, account_to, amount) VALUES (?, ?, ?) returning transfer_id";
+    public Transfer createTransfer(Transfer transfer) {
+        String sql = "INSERT INTO transfer (transfer_id, transfer_type_id, transfer_status_id, account_from, account_to, amount) VALUES (?, ?, ?, ? ,?, ?)";
         try{
-        SqlRowSet results = jdbcTemplate.queryForRowSet(sql, account_from, account_to, amount);
+        SqlRowSet results = jdbcTemplate.queryForRowSet(sql,transfer.getTransfer_id(),transfer.getTransfer_type_id(),transfer.getTransfer_status_id(), transfer.getAccount_from(),transfer.getAccount_to(), transfer.getAmount());
+        jdbcTemplate.update(sql,results);
         while (results.next()){
             transfer = mapRowToTransfer(results);
-            return true;
         }
-        }catch (Exception e){}
-        return false;
+        }catch (Exception e){
+            System.out.print(e.getMessage());
+        }
+        return transfer;
+
     }
 
-
-    //Last Step
-    //Post Request
+    /*
     public boolean requestTransfer(Account account_from, Account account_to, BigDecimal amount) {
         if (amount == null) throw new IllegalArgumentException("Amount cannot be null");
         return false;
     }
+    */
 
     private Transfer mapRowToTransfer(SqlRowSet rs){
         Transfer transfer = new Transfer();
