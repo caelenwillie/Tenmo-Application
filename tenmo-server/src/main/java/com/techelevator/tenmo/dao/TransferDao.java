@@ -15,8 +15,4 @@ public interface TransferDao {
 
         //boolean requestTransfer(Account account_from, Account account_to, BigDecimal amount);
 
-        /* Moved the following methods to UserDao
-        List<Transfer> getTransferForUserId(int user_id);
-        List<Transfer> getTransferForUserIdTransferId(int user_id, int transfer_id);
-        */
 }

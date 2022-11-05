@@ -6,6 +6,9 @@ import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
+import java.security.Principal;
+
 public class App {
 
     private static final String API_BASE_URL = "http://localhost:8080/";
@@ -89,8 +92,9 @@ public class App {
     }
 
 	private void viewCurrentBalance() {
-
-	}
+        BigDecimal accountBalance = restTemplate.getForObject("http://localhost:8080/accounts/" + currentUser.getUser().getId(), BigDecimal.class);
+        System.out.println("Your current account balance is: " + accountBalance);
+    }
 
 	private void viewTransferHistory() {
 		// TODO Auto-generated method stub

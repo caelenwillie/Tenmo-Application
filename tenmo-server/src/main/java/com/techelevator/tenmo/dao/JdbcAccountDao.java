@@ -20,11 +20,13 @@ public class JdbcAccountDao implements AccountDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public BigDecimal getAccountBalance(int account_id) {
+    public BigDecimal getAccountBalance(int user_id) {
         Account account = new Account();
-        String sql = "SELECT * FROM account WHERE account_id = ?";
+        String sql = "SELECT * FROM account\n" +
+                "JOIN tenmo_user ON account.user_id = tenmo_user.user_id\n" +
+                "WHERE account.user_id = ?";
         try {
-            SqlRowSet result = jdbcTemplate.queryForRowSet(sql,account_id);
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql,user_id);
             while (result.next()) {
                 account = mapRowToAccount(result);
             }

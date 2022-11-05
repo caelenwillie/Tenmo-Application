@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 public interface AccountDao {
 
-        BigDecimal getAccountBalance(int account_id);
+        BigDecimal getAccountBalance(int user_id);
 
         void updateAccountBalance(Transfer transfer);
 
