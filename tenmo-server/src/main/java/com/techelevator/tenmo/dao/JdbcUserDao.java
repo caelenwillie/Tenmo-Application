@@ -38,6 +38,22 @@ public class JdbcUserDao implements UserDao {
         return userId;
     }
 
+    public String getUsernameFromAccountID(int account_id) {
+        User user = new User();
+        try {
+            String sql = "select * from tenmo_user\n" +
+                    "join account on tenmo_user.user_id = account.user_id\n" +
+                    "where account_id = ?\n";
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql,account_id);
+            while(result.next()){
+                user = mapRowToUser(result);
+            }
+        }catch(Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return user.getUsername();
+    }
+
     @Override
     public User getUserById(int userId) {
         String sql = "SELECT user_id, username, password_hash FROM tenmo_user WHERE user_id = ?";
@@ -111,8 +127,9 @@ public class JdbcUserDao implements UserDao {
     }
 
     // Get Request
-    public List<Transfer> getTransferForUserId(int user_id) {
+    public Transfer[] getTransferForUserId(int user_id) {
         List<Transfer> transfers = new ArrayList<>();
+        Transfer[] list;
         String sql = "SELECT * FROM transfer " +
                 "JOIN account ON account.account_id = transfer.account_from OR account.account_id = transfer.account_to " +
                 "WHERE user_id = ?";
@@ -124,7 +141,8 @@ public class JdbcUserDao implements UserDao {
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-        return transfers;
+        list =  transfers.toArray(Transfer[]::new);
+        return list;
     }
 
     private User mapRowToUser(SqlRowSet rs) {

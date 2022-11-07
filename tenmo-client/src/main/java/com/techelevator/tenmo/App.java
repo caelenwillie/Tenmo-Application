@@ -6,6 +6,7 @@ import com.techelevator.tenmo.model.User;
 import com.techelevator.tenmo.model.UserCredentials;
 import com.techelevator.tenmo.services.AuthenticationService;
 import com.techelevator.tenmo.services.ConsoleService;
+import com.techelevator.tenmo.services.accountService;
 import org.springframework.web.client.RestTemplate;
 import com.techelevator.tenmo.services.TransferService;
 
@@ -19,7 +20,9 @@ public class App {
 
     private static final String API_BASE_URL = "http://localhost:8080/";
 
+    private final accountService accountService = new accountService(API_BASE_URL);
     private final ConsoleService consoleService = new ConsoleService();
+    private final TransferService transferService = new TransferService(API_BASE_URL);
     private final AuthenticationService authenticationService = new AuthenticationService(API_BASE_URL);
 
     private AuthenticatedUser currentUser;
@@ -103,20 +106,22 @@ public class App {
     }
 
 	private void viewTransferHistory() {
-
-       // Transfer[] transfers = ;
-        //System.out.println("--------------------------");
-        //System.out.println("Transfers");
-        //System.out.println("ID     From/To     Amount");
-       // System.out.println("---------------------------");
-
-       // int currentUserID = currentUser.getUser().getId();
-        //for(Transfer transfer : transferHistory){
-        //    System.out.println(currentUser, transfer);
-       // }
+        try {
+            Transfer[] transferHistory;
+            transferHistory = transferService.listTransfersFromUserID(currentUser.getUser().getId());
+            System.out.println("--------------------------");
+            System.out.println("Transfers");
+            System.out.println("ID     From/To     Amount");
+            System.out.println("---------------------------");
+            int currentUserID = currentUser.getUser().getId();
+            for(Transfer transfer : transferHistory) {
+                System.out.println(transfer.getTransfer_id() + "  " + accountService.getUsernameForAccountID(transfer.getAccount_from()) + "  " + accountService.getUsernameForAccountID(transfer.getAccount_to()) + "  " + transfer.getAmount());
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
 		// TODO Auto-generated method stub
-		
 	}
 
 	private void viewPendingRequests() {
@@ -125,8 +130,18 @@ public class App {
 	}
 
 	private void sendBucks() {
-		// TODO Auto-generated method stub
-		
+        User[] userList = accountService.getAllUsers();
+        for (User user : userList) {
+            if (user != currentUser.getUser()) {
+                System.out.println("ID: " + user.getId() + " | " + user.getUsername());
+            }
+        }
+        int userIdSelect = consoleService.promptForInt("Enter the ID of the user to send money to:");
+        viewCurrentBalance();
+        BigDecimal amountToSend = consoleService.promptForBigDecimal("Enter the emount to send");
+
+
+
 	}
 
 	private void requestBucks() {

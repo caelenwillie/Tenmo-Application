@@ -31,9 +31,9 @@ public class JdbcAccountDao implements AccountDao {
                 account = mapRowToAccount(result);
             }
         } catch(Exception e){}
-        System.out.println(account.toString());
         return account.getBalance();
     }
+
 
     @Override
     public void updateAccountBalance(Transfer transfer) {

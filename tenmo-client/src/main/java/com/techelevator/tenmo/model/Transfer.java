@@ -4,66 +4,64 @@ import java.math.BigDecimal;
 
 public class Transfer {
 
-    private int transferId;
-    private int transferTypeId;
-    private int transferStatusId;
-    private int accountTo;
-    private int accountFrom;
+    private int transfer_id;
+    private int transfer_type_id;
+    private int transfer_status_id;
+    private int account_to;
+    private int account_from;
     private BigDecimal amount;
-    private String token;
 
-    public Transfer(){
+    public Transfer() {
 
     }
 
-    public Transfer(int transferId, int transferTypeId, int transferStatusId, int accountTo, int accountFrom, BigDecimal amount, String token) {
-        this.transferId = transferId;
-        this.transferTypeId = transferTypeId;
-        this.transferStatusId = transferStatusId;
-        this.accountTo = accountTo;
-        this.accountFrom = accountFrom;
+    public Transfer(int transfer_id, int transfer_type_id, int transfer_status_id, int account_to, int account_from, BigDecimal amount) {
+        this.transfer_id = transfer_id;
+        this.transfer_type_id = transfer_type_id;
+        this.transfer_status_id = transfer_status_id;
+        this.account_to = account_to;
+        this.account_from = account_from;
         this.amount = amount;
-        this.token = token;
     }
 
-    public int getTransferId() {
-        return transferId;
+    public int getTransfer_id() {
+        return transfer_id;
     }
 
-    public void setTransferId(int transferId) {
-        this.transferId = transferId;
+    public void setTransfer_id(int transfer_id) {
+        this.transfer_id = transfer_id;
     }
 
-    public int getTransferTypeId() {
-        return transferTypeId;
+    public int getTransfer_type_id() {
+        return transfer_type_id;
     }
 
-    public void setTransferTypeId(int transferTypeId) {
-        this.transferTypeId = transferTypeId;
+    public void setTransfer_type_id(int transfer_type_id) {
+        this.transfer_type_id = transfer_type_id;
     }
 
-    public int getTransferStatusId() {
-        return transferStatusId;
+    public int getTransfer_status_id() {
+        return transfer_status_id;
     }
 
-    public void setTransferStatusId(int transferStatusId) {
-        this.transferStatusId = transferStatusId;
+    public void setTransfer_status_id(int transfer_status_id) {
+        this.transfer_status_id = transfer_status_id;
     }
 
-    public int getAccountTo() {
-        return accountTo;
+    public int getAccount_to() {
+        return account_to;
     }
 
-    public void setAccountTo(int accountTo) {
-        this.accountTo = accountTo;
+    public void setAccount_to(int account_to) {
+        this.account_to = account_to;
     }
 
-    public int getAccountFrom() {
-        return accountFrom;
+    public int getAccount_from() {
+        return account_from;
     }
 
-    public void setAccountFrom(int accountFrom) {
-        this.accountFrom = accountFrom;
+    public void setAccount_from(int account_from) {
+        this.account_from = account_from;
     }
 
     public BigDecimal getAmount() {
@@ -74,11 +72,4 @@ public class Transfer {
         this.amount = amount;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

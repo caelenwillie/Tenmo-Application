@@ -10,6 +10,8 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+
 public class TransferService {
 
     private String API_Base_URL = "http://localhost:8080/";
@@ -39,6 +41,13 @@ public class TransferService {
             BasicLogger.log(e.getMessage());
         }
         return transfer;
+    }
+
+
+    public Transfer[] listTransfersFromUserID(int userID) {
+        Transfer[] transferList;
+        transferList = restTemplate.getForObject(API_Base_URL+ "users/"+userID+"/transfers",Transfer[].class);
+        return transferList;
     }
 
 

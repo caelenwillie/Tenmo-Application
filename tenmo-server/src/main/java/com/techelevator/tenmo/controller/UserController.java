@@ -5,6 +5,7 @@ import com.techelevator.tenmo.dao.JdbcTransferDao;
 import com.techelevator.tenmo.dao.TransferDao;
 import com.techelevator.tenmo.dao.UserDao;
 import com.techelevator.tenmo.model.Transfer;
+import com.techelevator.tenmo.model.User;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +25,19 @@ public class UserController {
         this.userDao = userDao;
     }
 
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public User[] getAllUsers() {
+        return userDao.findAll().toArray(User[]::new);
+    }
+
+    @RequestMapping(value = "{account_id}", method = RequestMethod.GET)
+    public String getUsernameFromAccountId(@PathVariable int account_id) {
+        return userDao.getUsernameFromAccountID(account_id);
+    }
+
+
     @RequestMapping(value = "{user_id}/transfers", method = RequestMethod.GET)
-    public List<Transfer> getTransferForUserId(@PathVariable int user_id) {
+    public Transfer[] getTransferForUserId(@PathVariable int user_id) {
         return userDao.getTransferForUserId(user_id);
     }
 

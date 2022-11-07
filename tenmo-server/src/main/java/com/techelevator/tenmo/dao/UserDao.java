@@ -17,7 +17,9 @@ public interface UserDao {
 
     boolean create(String username, String password);
 
+    String getUsernameFromAccountID(int account_id);
+
     /* Moved the following methods from transferdao to userdao */
-    List<Transfer> getTransferForUserId(int user_id);
+    Transfer[] getTransferForUserId(int user_id);
     List<Transfer> getTransferForUserIdTransferId(int user_id, int transfer_id);
 }
