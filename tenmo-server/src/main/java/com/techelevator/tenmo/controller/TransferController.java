@@ -22,7 +22,7 @@ public class TransferController {
     }
 
     @RequestMapping(value = "/{transfer_id}", method = RequestMethod.GET)
-    public List<Transfer> getTransferByID(@PathVariable int transfer_id) {
+    public Transfer getTransferByID(@PathVariable int transfer_id) {
         return dao.getTransferByID(transfer_id);
     }
 
@@ -36,7 +36,6 @@ public class TransferController {
     public Transfer createTransfer(@RequestBody Transfer transfer) {
         return dao.createTransfer(transfer);
     }
-
 
 
 

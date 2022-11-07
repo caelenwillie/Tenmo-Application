@@ -19,8 +19,8 @@ public class Transfer {
         this.transfer_id = transfer_id;
         this.transfer_type_id = transfer_type_id;
         this.transfer_status_id = transfer_status_id;
-        this.account_to = account_to;
         this.account_from = account_from;
+        this.account_to = account_to;
         this.amount = amount;
     }
 

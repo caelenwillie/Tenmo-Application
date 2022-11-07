@@ -33,14 +33,14 @@ public class JdbcTransferDao implements TransferDao {
     }
 
     // Get Request
-    public List<Transfer> getTransferByID(int transfer_id) {
+    public Transfer getTransferByID(int transfer_id) {
+        Transfer transfer = new Transfer();
         String sql = "SELECT * FROM transfer WHERE transfer_id = ?";
         SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transfer_id);
-        List<Transfer> transfers = new ArrayList<>();
         while(results.next()) {
-            transfers.add(mapRowToTransfer(results));
+            transfer = mapRowToTransfer(results);
         }
-        return transfers;
+        return transfer;
     }
 
 

@@ -26,4 +26,9 @@ public class AccountController {
         dao.updateAccountBalance(transfer);
     }
 
+    @RequestMapping(value = "/user/{userID}", method = RequestMethod.GET)
+    public int getAccountIdFromUserId(@PathVariable int userID) {
+        return dao.getAccountIdFromUserId(userID);
+    }
+
 }

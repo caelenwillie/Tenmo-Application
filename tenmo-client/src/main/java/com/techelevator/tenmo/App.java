@@ -15,6 +15,7 @@ import java.security.Principal;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class App {
 
@@ -117,6 +118,12 @@ public class App {
             for(Transfer transfer : transferHistory) {
                 System.out.println(transfer.getTransfer_id() + "  " + accountService.getUsernameForAccountID(transfer.getAccount_from()) + "  " + accountService.getUsernameForAccountID(transfer.getAccount_to()) + "  " + transfer.getAmount());
             }
+            int transferidVal = consoleService.promptForInt("Please enter transfer ID to view details (0 to cancel): ");
+            if (transferidVal == 0) {
+                System.out.println("Exiting transfer history");
+            } else {
+                transferService.printTransferDetails(transferidVal);
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -138,15 +145,25 @@ public class App {
         }
         int userIdSelect = consoleService.promptForInt("Enter the ID of the user to send money to:");
         viewCurrentBalance();
-        BigDecimal amountToSend = consoleService.promptForBigDecimal("Enter the emount to send");
-
-
-
+        BigDecimal amountToSend = consoleService.promptForBigDecimal("Enter the amount to send:");
+        Random rand = new Random();
+        Transfer transfer = new Transfer(Math.abs(rand.nextInt()),2,1, accountService.getAccountIdFromUserId(userIdSelect),accountService.getAccountIdFromUserId(currentUser.getUser().getId()),amountToSend);
+        transferService.createTransfer(transfer, currentUser.getToken());
 	}
 
 	private void requestBucks() {
-		// TODO Auto-generated method stub
-		
+        User[] userList = accountService.getAllUsers();
+        for (User user : userList) {
+            if (user != currentUser.getUser()) {
+                System.out.println("ID: " + user.getId() + " | " + user.getUsername());
+            }
+        }
+        int userIdSelect = consoleService.promptForInt("Enter the ID of the user to request money from:");
+        viewCurrentBalance();
+        BigDecimal amountToSend = consoleService.promptForBigDecimal("Enter the amount to request");
+        Random rand = new Random();
+        Transfer transfer = new Transfer(Math.abs(rand.nextInt()),1,1, accountService.getAccountIdFromUserId(userIdSelect),accountService.getAccountIdFromUserId(currentUser.getUser().getId()),amountToSend);
+        transferService.createTransfer(transfer, currentUser.getToken());
 	}
 
 }

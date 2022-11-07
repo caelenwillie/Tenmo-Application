@@ -33,4 +33,9 @@ public class accountService {
 
     }
 
+    public int getAccountIdFromUserId(int userId) {
+        userId = restTemplate.getForObject(API_Base_URL + "/accounts/user/" + userId,int.class);
+        return userId;
+    }
+
 }

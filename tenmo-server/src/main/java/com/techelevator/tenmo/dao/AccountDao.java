@@ -11,4 +11,6 @@ public interface AccountDao {
 
         void updateAccountBalance(Transfer transfer);
 
+        int getAccountIdFromUserId(int userId);
+
 }

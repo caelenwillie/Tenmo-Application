@@ -34,6 +34,21 @@ public class JdbcAccountDao implements AccountDao {
         return account.getBalance();
     }
 
+    public int getAccountIdFromUserId(int accountId) {
+        Account account = new Account();
+        String sql = "select * from account\n" +
+                "where user_id =?\n";
+        try {
+            SqlRowSet result = jdbcTemplate.queryForRowSet(sql,accountId);
+            while (result.next()) {
+                account = mapRowToAccount(result);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return account.getAccount_id();
+    }
+
 
     @Override
     public void updateAccountBalance(Transfer transfer) {

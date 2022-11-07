@@ -33,10 +33,26 @@ public class TransferService {
 
         return transfers;}
 
+    public void printTransferDetails(int transfer_id) {
+        try {
+            Transfer transfer = restTemplate.getForObject(API_Base_URL + "transfers/" + transfer_id,Transfer.class);
+            System.out.println("--------------------------------------------\n" +
+                    "Transfer Details\n" +
+                    "--------------------------------------------\n");
+            System.out.println("Id: " + transfer.getTransfer_id());
+            System.out.println("From: " + transfer.getAccount_from());
+            System.out.println("To: " + transfer.getAccount_to());
+            System.out.println("Type: " + transfer.getTransfer_type_id());
+            System.out.println("Status: " + transfer.getTransfer_status_id());
+            System.out.println("Amount: " + transfer.getAmount());
+        } catch (Exception e){
+            System.out.println("Id does not exist on table");
+        }
+    }
+
     public Transfer createTransfer(Transfer transfer, String token){
         try{
-            restTemplate.exchange(API_Base_URL + "/transfers", HttpMethod.POST, authenticationEntity(token), Transfer.class).getBody();
-
+            restTemplate.postForObject(API_Base_URL + "/transfers",transfer,Transfer.class);
         } catch(RestClientResponseException | ResourceAccessException e){
             BasicLogger.log(e.getMessage());
         }

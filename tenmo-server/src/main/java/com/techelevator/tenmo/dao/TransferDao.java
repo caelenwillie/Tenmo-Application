@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public interface TransferDao {
-        List<Transfer> getTransferByID(int id);
+        Transfer getTransferByID(int id);
         /* Added new method below */
         List<Transfer> getAllTransfers();
 
